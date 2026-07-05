@@ -1,64 +1,50 @@
 # Estrattore Casuale Multi-Target
 
-Applicazione web client-side ad alte prestazioni ingegnerizzata per la generazione di campioni casuali da set di dati numerici o testuali. Sviluppato per supportare la didattica, ottimizzare le sessioni di verifica e agevolare la gestione delle dinamiche di gruppo all'interno dell'istituto, il software coniuga un'interfaccia utente pulita a una logica computazionale snella e priva di attriti.
+[Italiano](README.md) • [English](README_en.md) • [Español](README_es.md) • [Français](README_fr.md) • [Deutsch](README_de.md) • [中文](README_zh.md) • [日本語](README_ja.md)
+
+L'applicazione web definitiva per gestire le estrazioni a scuola in modo rapido, trasparente e moderno. Dimentica i vecchi bigliettini di carta o i generatori lenti: questo strumento è progettato per offrire un'interfaccia fluida, immediata e ottimizzata per qualsiasi dispositivo.
+
+Che serva per un'interrogazione dell'ultimo minuto, per dividere la classe in gruppi di lavoro o per estrarre i turni di una presentazione, l'Estrattore Casuale fa tutto il lavoro pesante al posto tuo, direttamente nel browser.
 
 ---
 
-## Architettura Funzionale
+## Cosa puoi fare
 
-### Generazione Numerica Vincolata
-Il motore di calcolo permette la definizione di un intervallo chiuso [Min, Max] all'interno del quale estrarre subset di dati di cardinalità variabile. Un sistema di validazione nativo impedisce l'esecuzione di cicli logici errati, come l'impostazione di un valore minimo superiore al limite massimo.
+* **Estrazioni Numeriche al Volo**
+  Scegli l'intervallo (es. da 1 a 30), decidi quanti numeri estrarre insieme e lancia l'estrazione. Zero attese, risultato istantaneo.
 
-### Parsing Testuale Dinamico
-L'input per la gestione dei nominativi adotta un modello di separazione basato su interruzione di riga. Il sistema esegue un filtraggio automatico degli spazi vuoti e aggiorna in tempo reale un contatore di elementi attivi, ottimizzando l'esperienza di inserimento di elenchi strutturati (es. registri di classe).
+* **Elenchi di Nomi Personalizzati**
+  Incolla o scrivi la lista della classe (un nome per riga). L'app conta automaticamente quanti studenti sono presenti e pronti per il sorteggio.
 
-### Controllo dello Stato e Anti-Ripetizione
-Attraverso l'implementazione dell'oggetto nativo `Set` di JavaScript, l'applicazione garantisce l'esclusione matematica dei duplicati nelle estrazioni sequenziali. Gli elementi estratti vengono rimossi temporaneamente dal pool principale e mappati graficamente come componenti atomici nell'area dei valori esclusi.
+* **Modalità "Mai Più Duplicati"**
+  Attiva l'algoritmo anti-ripetizione: i nomi o i numeri già usciti vengono esclusi automaticamente dai giri successivi e mostrati in un'area dedicata, così nessuno viene estratto due volte.
 
-### Storage Locale Persistente
-Il modulo di cronologia implementa una pipeline di memorizzazione basata su `localStorage`. Vengono mantenuti in persistenza gli ultimi 15 record di estrazione, ciascuno strutturato con metadati precisi: vettore dei risultati, modalità di esecuzione e timestamp atomico (data e ora dell'evento).
+* **Cronologia Sempre Sotto Controllo**
+  L'applicazione si ricorda delle ultime 15 estrazioni effettuate, complete di ora esatta e modalità, salvando tutto sul tuo dispositivo anche se chiudi la pagina.
 
 ---
 
-## Specifiche Tecniche
-
-L'applicazione è strutturata secondo il paradigma **Zero-Dependency Single File**. Non richiede fasi di compilazione, interpreti lato server o l'installazione di pacchetti software di terze parti.
+## I Punti di Forza del Progetto
 
 <details>
-<summary><b>Visualizza Schema Logico e Stack Tecnologico</b></summary>
+<summary><b>Perché è così comodo e leggero? (Dettagli tecnici)</b></summary>
 
-   [ Client Browser ]
-           │
-   ┌───────┴───────┐
-   ▼               ▼
-┌─────────────┐ ┌─────────────┐
-│  DOM Engine │ │ LocalStorage│ (Cronologia fino a 15 record)
-└──────┬──────┘ └─────────────┘
-▼
-┌─────────────┐
-│ Set State   │ (Algoritmo Anti-Ripetizione)
-└─────────────┘
-
-
-| Layer | Stack Tecnologico | Ruolo nel Sistema |
-| :--- | :--- | :--- |
-| **Interfaccia** | HTML5 Semantico | Definizione strutturale dei pannelli di controllo e di output. |
-| **Stile** | CSS3 (Grid & Flexbox) | Design responsivo con architettura a token cromatici (Custom Properties). |
-| **Computazione** | JavaScript ES6+ | Gestione degli eventi del DOM, logica `Math.random()` e mutazione di stato. |
-| **Asset** | Google CDN | Integrazione del font *Titillium Web* e del set iconografico *Material Icons*. |
+* **Tutto in un unico file**: L'intera applicazione vive nel file `index.html`. Nessuna cartella caotica o file disperso.
+* **Zero installazioni**: Non servono server o configurazioni. Basta un doppio clic sul file e sei pronto a partire su PC, tablet o smartphone.
+* **Persistenza locale**: Sfrutta la memoria interna del browser (`localStorage`) per non perdere la cronologia delle estrazioni.
+* **Nessuna dipendenza esterna**: Funziona offline e non richiede il download di pacchetti pesanti di terze parti.
 
 </details>
 
 ---
 
-## Requisiti e Deployment
+## Come Iniziare Subito
 
 <details>
-<summary><b>Mostra Guida all'Installazione e Uso Rapido</b></summary>
+<summary><b>Istruzioni per l'uso rapido</b></summary>
 
-### Avvio Rapido
-L'assenza di un backend proprietario rende l'applicazione immediatamente eseguibile in qualsiasi ambiente sandbox o browser moderno.
-
-1. Clonare localmente la risorsa:
-   ```bash
-   git clone [https://github.com/tuo-username/nome-repository.git](https://github.com/tuo-username/nome-repository.git)
+### 1. Scarica il progetto
+Clona la repository sul tuo computer usando il terminale:
+```bash
+git clone [https://github.com/tuo-username/nome-repository.git](https://github.com/tuo-username/nome-repository.git)
+cd nome-repository
