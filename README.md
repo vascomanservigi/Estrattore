@@ -1,33 +1,25 @@
-# Estrattore Casuale per Istituti Scolastici
+# Estrattore Casuale Multi-Target
 
-Applicazione web client-side progettata per l'estrazione casuale di numeri e nomi. Il progetto è pensato per l'utilizzo in contesti didattici e scolastici, offrendo un'interfaccia ad alta leggibilità basata sui font e sulle linee guida della pubblica amministrazione italiana.
+Applicazione web client-side ad alte prestazioni ingegnerizzata per la generazione di campioni casuali da set di dati numerici o testuali. Sviluppato per supportare la didattica, ottimizzare le sessioni di verifica e agevolare la gestione delle dinamiche di gruppo all'interno dell'istituto, il software coniuga un'interfaccia utente pulita a una logica computazionale snella e priva di attriti.
 
-## Caratteristiche
+---
 
-* **Estrazione Numerica**: Generazione di valori casuali all'interno di un range definito dall'utente (Min/Max) con specifica della quantità di elementi da estrarre contemporaneamente.
-* **Estrazione Nomi**: Input testuale multilinea con parsing automatico (un nome per riga) e contatore in tempo reale degli elementi validi inseriti.
-* **Algoritmo di Non Ripetizione**: Gestione dello stato degli elementi estratti tramite strutture dati `Set` per garantire l'esclusione di duplicati nelle estrazioni successive. Gli elementi temporaneamente esclusi vengono mostrati in una sezione di riepilogo dedicata.
-* **Persistenza della Cronologia**: Memorizzazione locale delle ultime 15 estrazioni tramite `localStorage`. Ogni voce registra la modalità, i valori estratti, la data e l'ora dell'operazione.
-* **Layout Responsivo**: Interfaccia ottimizzata per la visualizzazione desktop e mobile (media queries per breakpoint a 900px e 640px).
+## Architettura Funzionale
+
+### Generazione Numerica Vincolata
+Il motore di calcolo permette la definizione di un intervallo chiuso [Min, Max] all'interno del quale estrarre subset di dati di cardinalità variabile. Un sistema di validazione nativo impedisce l'esecuzione di cicli logici errati, come l'impostazione di un valore minimo superiore al limite massimo.
+
+### Parsing Testuale Dinamico
+L'input per la gestione dei nominativi adotta un modello di separazione basato su interruzione di riga. Il sistema esegue un filtraggio automatico degli spazi vuoti e aggiorna in tempo reale un contatore di elementi attivi, ottimizzando l'esperienza di inserimento di elenchi strutturati (es. registri di classe).
+
+### Controllo dello Stato e Anti-Ripetizione
+Attraverso l'implementazione dell'oggetto nativo `Set` di JavaScript, l'applicazione garantisce l'esclusione matematica dei duplicati nelle estrazioni sequenziali. Gli elementi estratti vengono rimossi temporaneamente dal pool principale e mappati graficamente come componenti atomici nell'area dei valori esclusi.
+
+### Storage Locale Persistente
+Il modulo di cronologia implementa una pipeline di memorizzazione basata su `localStorage`. Vengono mantenuti in persistenza gli ultimi 15 record di estrazione, ciascuno strutturato con metadati precisi: vettore dei risultati, modalità di esecuzione e timestamp atomico (data e ora dell'evento).
+
+---
 
 ## Specifiche Tecniche
 
-Il progetto è sviluppato in modalità standalone e non richiede dipendenze o package manager per l'esecuzione:
-
-| Componente | Tecnologia | Utilizzo principale |
-| :--- | :--- | :--- |
-| **Struttura** | HTML5 | Componenti semantici dell'interfaccia |
-| **Stile** | CSS3 | Layout Grid/Flexbox e Custom Properties (variabili) |
-| **Logica** | JS (ES6+) | Manipolazione del DOM, `Math.random()` e `localStorage` |
-| **Risorse** | Web Fonts | Google Fonts (Titillium Web) e Material Icons Round |
-
-## Installazione e Utilizzo
-
-Trattandosi di un'applicazione esclusivamente client-side, non è necessaria alcuna fase di compilazione o configurazione del server.
-
-1. Clonare la repository o scaricare il file `index.html`.
-2. Aprire il file `index.html` in un qualsiasi browser web moderno.
-
-```bash
-git clone [https://github.com/tuo-username/nome-repository.git](https://github.com/tuo-username/nome-repository.git)
-cd nome-repository
+L'applicazione è strutturata secondo il paradigma **Zero-Dependency Single File**. Non richiede fasi di compilazione, interpreti lato server o l'installazione di pacchetti software di terze parti.
