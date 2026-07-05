@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrattore WEB</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2306C'/><path d='M50 30L15 45L50 60L85 45L50 30Z' fill='white'/><path d='M25 50V65L50 75L75 65V50L50 60L25 50Z' fill='white'/><rect x='77' y='45' width='6' height='30' fill='white'/><circle cx='80' cy='78' r='5' fill='white'/></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #06C;
+            --primary-dark: #004080;
+            --primary-light: #E6F2FF;
+            --bg: #F0F4F8;
+            --surface: #FFFFFF;
+            --text: #17324D;
+            --text-muted: #5C6975;
+            --border: #D0D6DB;
+            --success: #059669;
+            --warning: #D97706;
+            --error: #DC2626;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Titillium Web', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon .material-icons-round {
+            color: var(--primary);
+            font-size: 26px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* MAIN */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 24px 32px;
+            min-height: 0;
+        }
+
+        /* PANEL */
+        .panel {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            min-height: 0;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title .material-icons-round {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .tab:hover { color: var(--text); }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab .material-icons-round { font-size: 18px; }
+
+        /* CONFIG */
+        .config-section {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .config-section.active { display: flex; }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="number"], textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: var(--bg);
+            color: var(--text);
+            font-weight: 600;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        textarea {
+            flex: 1;
+            resize: none;
+            min-height: 0;
+            line-height: 1.5;
+        }
+
+        .counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+            padding: 10px 12px;
+            background: var(--primary-light);
+            border-radius: 8px;
+        }
+
+        .checkbox-row input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .checkbox-row label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .excluded-box {
+            margin-top: 8px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .excluded-box.visible { display: block; }
+
+        .excluded-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-transform: uppercase;
+        }
+
+        .excluded-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .excluded-chip {
+            padding: 3px 10px;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* RESULT */
+        .result-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg) 100%);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        .result-display::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(6,102,204,0.08);
+            border-radius: 50%;
+            top: -30%;
+            right: -20%;
+        }
+
+        .result-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .result-placeholder .material-icons-round {
+            font-size: 48px;
+            margin-bottom: 8px;
+            opacity: 0.3;
+        }
+
+        .result-placeholder p {
+            font-size: 0.95rem;
+        }
+
+        .result-single {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-align: center;
+            line-height: 1;
+        }
+
+        .result-multiple {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .result-chip {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(6,102,204,0.3);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn .material-icons-round { font-size: 20px; }
+
+        /* HISTORY */
+        .history-section {
+            margin-top: 16px;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .history-header h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .history-header h3 .material-icons-round {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: rgba(220,38,38,0.1);
+            color: var(--error);
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .history-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .history-icon .material-icons-round {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .history-info { flex: 1; min-width: 0; }
+
+        .history-mode {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .history-values {
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .material-icons-round {
+            font-size: 32px;
+            margin-bottom: 6px;
+            opacity: 0.3;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
+
+        /* ANIMATIONS */
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pop { animation: pop 0.3s ease-out; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 16px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+
+            .result-single {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 10px 16px;
+            }
+
+            main {
+                padding: 12px;
+            }
+
+            .input-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .btn-row {
+                flex-direction: column;
+            }
+
+            .result-single {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-icon">
+            <span class="material-icons-round">school</span>
+        </div>
+        <div class="logo-text">
+            <h1>Estrattore</h1>
+            <p>Istituto Istruzione Superiore</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="panel">
+            <div class="panel-title">
+                <span class="material-icons-round">tune</span>
+                Configurazione
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" data-tab="numbers">
+                    <span class="material-icons-round">pin</span>
+                    Numeri
+                </button>
+                <button class="tab" data-tab="names">
+                    <span class="material-icons-round">people</span>
+                    Nomi
+                </button>
+            </div>
+
+            <div id="numbersConfig" class="config-section active">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Da</label>
+                        <input type="number" id="minNum" value="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label>A</label>
+                        <input type="number" id="maxNum" value="30" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Quantità</label>
+                        <input type="number" id="countNum" value="1" min="1">
+                    </div>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="noRepeatNum">
+                    <label for="noRepeatNum">Non ripetere numeri estratti</label>
+                </div>
+                <div class="excluded-box" id="excludedNumBox">
+                    <div class="excluded-title">
+                        <span class="material-icons-round" style="font-size:14px">block</span>
+                        Esclusi
+                    </div>
+                    <div class="excluded-chips" id="excludedNumChips"></div>
+                </div>
+            </div>
+
+            <div id="namesConfig" class="config-section">
+                <textarea id="namesInput" placeholder="Un nome per riga&#10;Mario Rossi&#10;Laura Bianchi"></textarea>
+                <div class="counter" id="namesCounter">0 nomi</div>
+                <div class="input-grid" style="margin-top:8px">
+                    <div class="input-group">
+                        <label>Quantità</label>
+                        <input type="number" id="countNames" value="1" min="1">
+                    </div>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="noRepeatNames">
+                    <label for="noRepeatNames">Non ripetere nomi estratti</label>
+                </div>
+                <div class="excluded-box" id="excludedNamesBox">
+                    <div class="excluded-title">
+                        <span class="material-icons-round" style="font-size:14px">block</span>
+                        Esclusi
+                    </div>
+                    <div class="excluded-chips" id="excludedNamesChips"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">
+                <span class="material-icons-round">casino</span>
+                Estrazione
+            </div>
+
+            <div class="result-display" id="resultDisplay">
+                <div class="result-placeholder">
+                    <span class="material-icons-round">touch_app</span>
+                    <p>Premi Estrai</p>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" id="extractBtn">
+                    <span class="material-icons-round">shuffle</span>
+                    Estrai
+                </button>
+                <button class="btn btn-secondary" id="resetBtn">
+                    <span class="material-icons-round">refresh</span>
+                    Reset
+                </button>
+            </div>
+
+            <div class="history-section">
+                <div class="history-header">
+                    <h3>
+                        <span class="material-icons-round">history</span>
+                        Cronologia
+                    </h3>
+                    <button class="clear-btn" id="clearHistoryBtn">
+                        <span class="material-icons-round" style="font-size:14px">delete_sweep</span>
+                        Cancella
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">
+                        <span class="material-icons-round">inbox</span>
+                        <p>Nessuna estrazione</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">
+        <span class="material-icons-round">info</span>
+        <span id="toastMsg">Messaggio</span>
+    </div>
+
+    <script>
+        const $ = id => document.getElementById(id);
+
+        let excludedNumbers = new Set();
+        let excludedNames = new Set();
+        let history = JSON.parse(localStorage.getItem('estrattore_history') || '[]');
+
+        const tabs = document.querySelectorAll('.tab');
+        const numbersConfig = $('numbersConfig');
+        const namesConfig = $('namesConfig');
+        const namesInput = $('namesInput');
+        const namesCounter = $('namesCounter');
+        const resultDisplay = $('resultDisplay');
+        const extractBtn = $('extractBtn');
+        const resetBtn = $('resetBtn');
+        const historyList = $('historyList');
+        const clearHistoryBtn = $('clearHistoryBtn');
+        const toast = $('toast');
+        const toastMsg = $('toastMsg');
+
+        // Tabs
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                numbersConfig.classList.toggle('active', tab.dataset.tab === 'numbers');
+                namesConfig.classList.toggle('active', tab.dataset.tab === 'names');
+            };
+        });
+
+        // Names counter
+        namesInput.oninput = () => {
+            const names = getNames();
+            namesCounter.textContent = `${names.length} nomi`;
+        };
+
+        function getNames() {
+            return namesInput.value.split('\n').map(n => n.trim()).filter(n => n);
+        }
+
+        // Extract
+        extractBtn.onclick = () => {
+            const isNumbers = numbersConfig.classList.contains('active');
+            isNumbers ? extractNumbers() : extractNames();
+        };
+
+        function extractNumbers() {
+            const min = parseInt($('minNum').value) || 1;
+            const max = parseInt($('maxNum').value) || 30;
+            const count = parseInt($('countNum').value) || 1;
+            const noRepeat = $('noRepeatNum').checked;
+
+            if (min >= max) return showToast('Il valore "Da" deve essere minore di "A"', 'error');
+
+            const available = [];
+            for (let i = min; i <= max; i++) {
+                if (!noRepeat || !excludedNumbers.has(i)) available.push(i);
+            }
+
+            if (available.length === 0) return showToast('Tutti i numeri sono stati estratti', 'warning');
+
+            const toExtract = Math.min(count, available.length);
+            const results = [];
+
+            for (let i = 0; i < toExtract; i++) {
+                const idx = Math.floor(Math.random() * available.length);
+                results.push(available[idx]);
+                if (noRepeat) {
+                    excludedNumbers.add(available[idx]);
+                    available.splice(idx, 1);
+                }
+            }
+
+            showResult(results);
+            addHistory(results, 'Numeri');
+            updateExcluded('numbers');
+        }
+
+        function extractNames() {
+            const names = getNames();
+            const count = parseInt($('countNames').value) || 1;
+            const noRepeat = $('noRepeatNames').checked;
+
+            if (names.length === 0) return showToast('Inserisci almeno un nome', 'error');
+
+            const available = names.filter(n => !noRepeat || !excludedNames.has(n));
+
+            if (available.length === 0) return showToast('Tutti i nomi sono stati estratti', 'warning');
+
+            const toExtract = Math.min(count, available.length);
+            const results = [];
+
+            for (let i = 0; i < toExtract; i++) {
+                const idx = Math.floor(Math.random() * available.length);
+                results.push(available[idx]);
+                if (noRepeat) {
+                    excludedNames.add(available[idx]);
+                    available.splice(idx, 1);
+                }
+            }
+
+            showResult(results);
+            addHistory(results, 'Nomi');
+            updateExcluded('names');
+        }
+
+        function showResult(results) {
+            if (results.length === 1) {
+                resultDisplay.innerHTML = `<div class="result-single pop">${results[0]}</div>`;
+            } else {
+                resultDisplay.innerHTML = `<div class="result-multiple">${results.map(r => `<div class="result-chip pop">${r}</div>`).join('')}</div>`;
+            }
+        }
+
+        function addHistory(results, mode) {
+            const now = new Date();
+            history.unshift({
+                results,
+                mode,
+                time: now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+                date: now.toLocaleDateString('it-IT')
+            });
+            if (history.length > 15) history.pop();
+            localStorage.setItem('estrattore_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-icons-round">inbox</span>
+                        <p>Nessuna estrazione</p>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = history.map(h => `
+                <div class="history-item">
+                    <div class="history-icon">
+                        <span class="material-icons-round">${h.mode === 'Numeri' ? 'pin' : 'person'}</span>
+                    </div>
+                    <div class="history-info">
+                        <div class="history-mode">${h.mode}</div>
+                        <div class="history-values">${h.results.join(', ')}</div>
+                        <div class="history-time">${h.date} ${h.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateExcluded(type) {
+            if (type === 'numbers') {
+                const box = $('excludedNumBox');
+                const chips = $('excludedNumChips');
+                if (excludedNumbers.size > 0) {
+                    box.classList.add('visible');
+                    chips.innerHTML = [...excludedNumbers].map(n => `<span class="excluded-chip">${n}</span>`).join('');
+                } else {
+                    box.classList.remove('visible');
+                }
+            } else {
+                const box = $('excludedNamesBox');
+                const chips = $('excludedNamesChips');
+                if (excludedNames.size > 0) {
+                    box.classList.add('visible');
+                    chips.innerHTML = [...excludedNames].map(n => `<span class="excluded-chip">${n}</span>`).join('');
+                } else {
+                    box.classList.remove('visible');
+                }
+            }
+        }
+
+        // Reset
+        resetBtn.onclick = () => {
+            excludedNumbers.clear();
+            excludedNames.clear();
+            updateExcluded('numbers');
+            updateExcluded('names');
+            resultDisplay.innerHTML = `
+                <div class="result-placeholder">
+                    <span class="material-icons-round">touch_app</span>
+                    <p>Premi Estrai</p>
+                </div>
+            `;
+            showToast('Reset completato', 'success');
+        };
+
+        // Clear history
+        clearHistoryBtn.onclick = () => {
+            history = [];
+            localStorage.removeItem('estrattore_history');
+            renderHistory();
+            showToast('Cronologia cancellata', 'success');
+        };
+
+        // Toast
+        function showToast(msg, type = 'info') {
+            toast.className = 'toast show ' + type;
+            toastMsg.textContent = msg;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Init
+        renderHistory();
+    </script>
+</body>
+</html>
