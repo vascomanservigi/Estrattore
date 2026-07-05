@@ -1,5 +1,7 @@
 # Estrattore Casuale Multi-Target
 
+[Italiano](README.md) • [English](README_en.md) • [Español](README_es.md) • [Français](README_fr.md) • [Deutsch](README_de.md) • [中文](README_zh.md) • [日本語](README_ja.md)
+
 Applicazione web client-side ad alte prestazioni ingegnerizzata per la generazione di campioni casuali da set di dati numerici o testuali. Sviluppato per supportare la didattica, ottimizzare le sessioni di verifica e agevolare la gestione delle dinamiche di gruppo all'interno dell'istituto, il software coniuga un'interfaccia utente pulita a una logica computazionale snella e priva di attriti.
 
 ---
@@ -23,3 +25,6 @@ Il modulo di cronologia implementa una pipeline di memorizzazione basata su `loc
 ## Specifiche Tecniche
 
 L'applicazione è strutturata secondo il paradigma **Zero-Dependency Single File**. Non richiede fasi di compilazione, interpreti lato server o l'installazione di pacchetti software di terze parti.
+
+<details>
+<summary><b>Visualizza Schema Logico e Stack Tecnologico</b></summary>
