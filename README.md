@@ -1,7 +1,5 @@
 # Estrattore Casuale Multi-Target
 
-[Italiano](README.md) • [English](README_en.md) • [Español](README_es.md) • [Français](README_fr.md) • [Deutsch](README_de.md) • [中文](README_zh.md) • [日本語](README_ja.md)
-
 Applicazione web client-side ad alte prestazioni ingegnerizzata per la generazione di campioni casuali da set di dati numerici o testuali. Sviluppato per supportare la didattica, ottimizzare le sessioni di verifica e agevolare la gestione delle dinamiche di gruppo all'interno dell'istituto, il software coniuga un'interfaccia utente pulita a una logica computazionale snella e priva di attriti.
 
 ---
@@ -28,3 +26,39 @@ L'applicazione è strutturata secondo il paradigma **Zero-Dependency Single File
 
 <details>
 <summary><b>Visualizza Schema Logico e Stack Tecnologico</b></summary>
+
+   [ Client Browser ]
+           │
+   ┌───────┴───────┐
+   ▼               ▼
+┌─────────────┐ ┌─────────────┐
+│  DOM Engine │ │ LocalStorage│ (Cronologia fino a 15 record)
+└──────┬──────┘ └─────────────┘
+▼
+┌─────────────┐
+│ Set State   │ (Algoritmo Anti-Ripetizione)
+└─────────────┘
+
+
+| Layer | Stack Tecnologico | Ruolo nel Sistema |
+| :--- | :--- | :--- |
+| **Interfaccia** | HTML5 Semantico | Definizione strutturale dei pannelli di controllo e di output. |
+| **Stile** | CSS3 (Grid & Flexbox) | Design responsivo con architettura a token cromatici (Custom Properties). |
+| **Computazione** | JavaScript ES6+ | Gestione degli eventi del DOM, logica `Math.random()` e mutazione di stato. |
+| **Asset** | Google CDN | Integrazione del font *Titillium Web* e del set iconografico *Material Icons*. |
+
+</details>
+
+---
+
+## Requisiti e Deployment
+
+<details>
+<summary><b>Mostra Guida all'Installazione e Uso Rapido</b></summary>
+
+### Avvio Rapido
+L'assenza di un backend proprietario rende l'applicazione immediatamente eseguibile in qualsiasi ambiente sandbox o browser moderno.
+
+1. Clonare localmente la risorsa:
+   ```bash
+   git clone [https://github.com/tuo-username/nome-repository.git](https://github.com/tuo-username/nome-repository.git)
